@@ -25,7 +25,7 @@ new Vue({
   el: '#app',
   // router,
   // store,
-  render: h => h(myApp),
+  render: h => h(myApp), //HTML化
   // render: h => h(myApp), は↓の書き方を短くしたもの
   // render: function (createElement) {
   //   return createElement(myApp)
