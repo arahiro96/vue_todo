@@ -1,5 +1,7 @@
 <template lang="html">
+ 
   <app-wrapper :todos="todos">
+    <router-view />
     <app-navi />
     <app-register
       v-if="todoFilter !== 'completedTodos'"
@@ -98,6 +100,7 @@ export default {
   },
   methods: {
     setFilter() {
+      //現在のルートの取得
       const routeName = this.$route.name;
       this.todoFilter = routeName;
       if (routeName === 'completedTodos') {

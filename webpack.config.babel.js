@@ -32,8 +32,9 @@ const config = {
     hot: true,
     port: 8080,
     contentBase: dist,
-    // historyApiFallback: true,
+    historyApiFallback: true,
   },
+
   entry: {
     index: `${src}/js/index.js`
   },

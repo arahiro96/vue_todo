@@ -6,8 +6,8 @@
       </header>
 
       <main class="main">
-        <form class="register"  @submit.prevent="targetTodo.id ? editTodo() : addTodo()"
-        >
+        <form class="register"  @submit.prevent="targetTodo.id ? editTodo() : addTodo()">
+        
           <div class="register__input">
             <p class="register__input__title">やることのタイトル</p>
             <input
@@ -15,7 +15,7 @@
               type="text"
               name="title"
               placeholder="ここにTODOのタイトルを記入してください"
-              required
+             
             >
           </div>
           <div class="register__input">
@@ -25,7 +25,7 @@
               name="detail"
               rows="3"
               placeholder="ここにTODOの内容を記入してください。改行は半角スペースに変換されます。"
-              required
+             
             />
           </div>
           <div class="register__submit">
@@ -124,11 +124,7 @@ export default {
     axios.get('http://localhost:3000/api/todos/').then(({ data }) => {
       this.todos = data.todos.reverse();
     }).catch((err) =>{
-      if(err.response) {
-        this.errorMessage = err.response.data.message;
-      }else{
-        this.errorMessage =  'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
-      }
+      showError(err);
     });
   },
   methods: {
@@ -143,7 +139,9 @@ export default {
     hideEroror() {
       this.errorMessage = '';
     },
+
     showError(err) {
+      console.log(err.response);
       if (err.response) {
         this.errorMessage = err.response.data.message;
       } else {
@@ -160,41 +158,43 @@ export default {
         this.targetTodo = this.initTargetTodo();
         this.hideEroror();
       }).catch((err) => {
-        this.showError();
+        this.showError(err);
       });
     },
     changeCompleted(todo) {
-      const targetTodo = Object.assign({}, todo);
-      axios.patch(`http://localhost:3000/api/todos/${targetTodo.id}`, {
-        completed: !targetTodo.completed,
+      const target = Object.assign({}, todo);
+      axios.patch(`http://localhost:3000/api/todos/${target.id}`, {
+        completed: !target.completed,
       }).then(( {data }) => {
         this.todos = this.todos.map((todoItem) => {
-          if(todoItem.id === targetTodo.id) return data;
+          if(todoItem.id === target.id) 
+          return data;
           return todoItem;
         });
         this.hideEroror();
       }).catch((err) => {
-       this.showError();
+       this.showError(err);
       });
     },
     deleteTodo(id) {
       this.targetTodo = this.initTargetTodo();
-      axios.delete(`http://localhost:3000/api/todos/${id}`).then(({ data }) => {
+
+      axios.delete(`http://localhost:3000/api/todos/${id}`).then((data) => {
+        console.log(id);
+        console.log(data.data);
+        
+        
         this.todos = data.todos.reverse();
         this.hideEroror();
       }).catch((err) => {
-        if(err.response) {
-          this.errorMessage = err.response.data.message;
-        } else {
-          this.errorMessage = 'ネットに接続されていない、もしくはサーバーとの接続がされていません。';
-        }
+        this.showError(err);
       });
     },
     showEditor(todo) {
-      this.targetTodo = Object.assign({}, todo);
+      this.targetTodo = Object.assign({}, todo);  
     },
     editTodo() {
-      const target = this.todos.find(todo => todo.id === this.targetTodo.id);
+      const target = this.todos.find(todo => todo.id === this.targetTodo.id);   
       if(
         target.title === this.targetTodo.title
         && target.detail === this.targetTodo.detail
@@ -206,14 +206,15 @@ export default {
         title: this.targetTodo.title,
         detail: this.targetTodo.detail,
       }).then(({ data }) => {
-        this.todos = this.todos.map((todo1) => {
-          if(todo1.id === this.targetTodo.id) return data;
-          return todo1;
+        this.todos = this.todos.map((todoItem) => {
+          if(todoItem.id === this.targetTodo.id) 
+          return data;
+          return todoItem;
         });
         this.targetTodo = this.initTargetTodo();
         this.hideEroror();
       }).catch((err) => {
-        this.showError();
+        this.showError(err);
       });
     }
   },
