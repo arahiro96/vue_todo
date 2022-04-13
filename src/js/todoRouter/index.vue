@@ -4,6 +4,7 @@
       <p>Todo with Routing of vue-router</p>
     </div>
     <router-view />
+    
   </div>
 </template>
 

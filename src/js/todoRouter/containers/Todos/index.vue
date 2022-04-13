@@ -1,7 +1,6 @@
 <template lang="html">
  
   <app-wrapper :todos="todos">
-    <router-view />
     <app-navi />
     <app-register
       v-if="todoFilter !== 'completedTodos'"
@@ -60,7 +59,7 @@ export default {
     appList: List,
     appRegister: Register,
   },
-  data() {
+  data: function() {
     return {
       todos: [],
       todoFilter: '',
